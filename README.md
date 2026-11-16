@@ -1,47 +1,98 @@
 # FinTrack
 
-FinTrack is a full-stack personal finance management application for tracking income and expenses, organizing transactions by category, and gaining insights into personal spending.
+FinTrack is a full-stack personal finance management application for tracking income and expenses, organizing transactions by category, and providing insights into personal spending.
 
-The project is being developed incrementally as a production-style full-stack application using ASP.NET Core, Angular, and PostgreSQL.
+The project is being developed incrementally, with a focus on building a production-style application using the .NET and Angular ecosystem.
 
 ## Current Features
 
-- Create financial transactions through a REST API
+- RESTful API built with ASP.NET Core
+- Create financial transactions
 - Retrieve all transactions
-- Track transaction details including:
-  - Description
-  - Amount
-  - Category
-  - Transaction type
-  - Date
-- JSON-based API communication
+- PostgreSQL database integration
+- Persistent transaction storage
+- Entity Framework Core for database access
+- EF Core migrations for database schema management
+- Automatic transaction ID generation
+- Automatic transaction timestamps
 
 ## Tech Stack
 
 ### Backend
 - C#
-- .NET 10
 - ASP.NET Core Web API
+- Entity Framework Core
+- Npgsql
+
+### Database
+- PostgreSQL
 
 ### Frontend
 - Angular
 - TypeScript
 
-### Database
-- PostgreSQL
-- Entity Framework Core
+Frontend development is planned for a later milestone.
 
 ### Development Tools
 - Git
 - GitHub
-- REST API testing with curl
+- .NET CLI
+- PostgreSQL CLI (`psql`)
 
-## API Endpoints
+## Current API Endpoints
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | `/api/transactions` | Retrieve all transactions |
-| POST | `/api/transactions` | Create a new transaction |
+### Get all transactions
+
+```http
+GET /api/transactions
+```
+
+Returns all transactions stored in the PostgreSQL database.
+
+### Create a transaction
+
+```http
+POST /api/transactions
+```
+
+Example request:
+
+```json
+{
+  "description": "Groceries",
+  "amount": 45.50,
+  "category": "Food",
+  "type": "Expense"
+}
+```
+
+Example response:
+
+```json
+{
+  "id": 1,
+  "description": "Groceries",
+  "amount": 45.50,
+  "category": "Food",
+  "type": "Expense",
+  "date": "2026-11-16T11:31:29.714034Z"
+}
+```
+
+## Database
+
+FinTrack currently uses PostgreSQL for persistent data storage.
+
+Entity Framework Core is used as the ORM between the ASP.NET Core application and PostgreSQL. Database schema changes are managed through EF Core migrations.
+
+The current `Transaction` entity contains:
+
+- `Id`
+- `Description`
+- `Amount`
+- `Category`
+- `Type`
+- `Date`
 
 ## Project Structure
 
@@ -50,28 +101,39 @@ fintrack/
 ├── backend/
 │   └── FinTrack.Api/
 │       ├── Controllers/
+│       ├── Data/
+│       ├── Migrations/
 │       ├── Models/
-│       ├── Program.cs
-│       └── FinTrack.Api.csproj
-├── .gitignore
+│       └── Program.cs
 └── README.md
 ```
 
 ## Development Roadmap
 
+### Completed
+
 - [x] Initialize ASP.NET Core Web API
 - [x] Create transaction model
-- [x] Implement GET transactions endpoint
-- [x] Implement POST transaction endpoint
-- [ ] Integrate PostgreSQL with Entity Framework Core
-- [ ] Implement full transaction CRUD
-- [ ] Add transaction validation
+- [x] Implement GET and POST transaction endpoints
+- [x] Set up PostgreSQL
+- [x] Integrate Entity Framework Core
+- [x] Create initial database migration
+- [x] Persist transactions in PostgreSQL
+
+### Next
+
+- [ ] Complete transaction CRUD operations
+- [ ] Add transaction filtering
+- [ ] Improve transaction categories and validation
 - [ ] Build Angular frontend
-- [ ] Add dashboard and financial summaries
+- [ ] Create financial dashboard
 - [ ] Add user authentication and authorization
+- [ ] Add customer and invoice functionality
 - [ ] Add automated tests
-- [ ] Configure CI/CD and deployment
+- [ ] Add Docker support
+- [ ] Add CI/CD with GitHub Actions
+- [ ] Deploy the application
 
-## Project Status
+## Status
 
-FinTrack is currently under active development. The initial REST API foundation is complete, and database persistence is the next development milestone.
+FinTrack is currently under active development. The backend supports creating and retrieving transactions with persistent PostgreSQL storage. Additional CRUD functionality and transaction management features are the next development milestone.
