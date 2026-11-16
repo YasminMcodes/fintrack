@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using FinTrack.Api.Models;
+using FinTrack.Api.Data;
 
 namespace FinTrack.Api.Controllers;
 
@@ -7,19 +9,26 @@ namespace FinTrack.Api.Controllers;
 [Route("api/[controller]")]
 public class TransactionsController : ControllerBase
 {
-    private static readonly List<Transaction> Transactions = new();
+    private readonly AppDbContext _context;
+        public TransactionsController(AppDbContext context)
+    {
+        _context = context;
+    }       
 
     [HttpGet]
-    public ActionResult<List<Transaction>> GetAll()
+    public async Task<ActionResult<List<Transaction>>> GetAll()
     {
-        return Ok(Transactions);
+        var transactions = await _context.Transactions.ToListAsync();
+
+        return Ok(transactions);
     }
 
     [HttpPost]
-    public ActionResult<Transaction> Create(Transaction transaction)
+    public async Task<ActionResult<Transaction>> Create(Transaction transaction)
     {
-        transaction.Id = Transactions.Count + 1;
-        Transactions.Add(transaction);
+        _context.Transactions.Add(transaction);
+
+        await _context.SaveChangesAsync();
 
         return Ok(transaction);
     }
